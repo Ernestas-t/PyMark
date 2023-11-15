@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import filedialog
+from tkinter.filedialog import asksaveasfile
 from PIL import Image, ImageTk, ImageFont, ImageDraw
 import customtkinter
 
@@ -41,7 +42,7 @@ class Watermarker(customtkinter.CTk):
         self.add_button = customtkinter.CTkButton(self.widget_frame, text='Add Watermark', command=self.add_watermark)
         self.add_button.grid(row=5, column=0, padx=10, sticky='w')
 
-        self.save_button = customtkinter.CTkButton(self.widget_frame, text='Save', command=self.add_watermark)
+        self.save_button = customtkinter.CTkButton(self.widget_frame, text='Save', command=self.save_file)
         self.save_button.grid(row=5, column=1, padx=10, sticky='e')
 
         self.widget_frame.grid(row=0, column=0, sticky='nsew')
@@ -80,6 +81,17 @@ class Watermarker(customtkinter.CTk):
 
         # Trigger the <Configure> event with the canvas dimensions
         self.canvas.event_generate('<Configure>', width=self.canvas.winfo_width(), height=self.canvas.winfo_height())
+
+    def save_file(self):
+        # Use asksaveasfile to get the file path and name
+        file_path = asksaveasfile(defaultextension=".png", filetypes=[("PNG files", "*.png")])
+
+        # Check if the user clicked on Cancel in the dialog
+        if file_path is None:
+            return
+
+        # Save the image to the specified file path
+        self.my_image.save(file_path.name)
 
     def add_watermark(self):
         self.open_files()
