@@ -20,8 +20,11 @@ class Watermarker(customtkinter.CTk):
         self.image_ratio = self.my_image.size[0] / self.my_image.size[1]
         self.resized_image_tk = None
 
-        self.widget_frame = customtkinter.CTkFrame(self)
-        self.widget_frame.columnconfigure(0, weight=1)  # Make button_frame resizable
+        self.sidebar = customtkinter.CTkFrame(self)
+        self.sidebar.columnconfigure(0, weight=1)  # Make widget_frame resizable
+
+        self.widget_frame = customtkinter.CTkFrame(self.sidebar)
+        self.widget_frame.columnconfigure(0, weight=1)
 
         # button frame widgets:
         self.path_field_label = customtkinter.CTkLabel(self.widget_frame, text='File Path: ', font=('verdana', 12))
@@ -53,7 +56,8 @@ class Watermarker(customtkinter.CTk):
         self.save_button = customtkinter.CTkButton(self.widget_frame, text='Save', command=self.save_file)
         self.save_button.grid(row=6, column=1, padx=10, sticky='e')
 
-        self.widget_frame.grid(row=0, column=0, sticky='nsew')
+        self.sidebar.grid(row=0, column=0, sticky='nsew')
+        self.widget_frame.grid(row=0, column=0, sticky='s')
 
         self.canvas = customtkinter.CTkCanvas(self, background='#333333', bd=0, highlightthickness=0, relief='ridge')
         self.canvas.grid(row=0, column=1, columnspan=3, sticky='nsew')
