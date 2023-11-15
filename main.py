@@ -17,24 +17,36 @@ class Watermarker(customtkinter.CTk):
         self.image_ratio = self.my_image.size[0] / self.my_image.size[1]
         self.resized_image_tk = None
 
-        self.button_frame = customtkinter.CTkFrame(self)
+        self.widget_frame = customtkinter.CTkFrame(self)
+        self.widget_frame.columnconfigure(0, weight=1)  # Make button_frame resizable
 
-        self.browse_button = customtkinter.CTkButton(self.button_frame, text='Browse Files',
+        # button frame widgets:
+        self.path_field_label = customtkinter.CTkLabel(self.widget_frame, text='File Path: ', font=('verdana', 12))
+        self.path_field_label.grid(row=0, column=0, sticky='w', padx=15)
+
+        self.path_field = customtkinter.CTkEntry(self.widget_frame)
+        self.path_field.grid(row=1, column=0, padx=10, columnspan=2, sticky='nsew')
+
+        self.browse_button = customtkinter.CTkButton(self.widget_frame, text='Browse Files',
                                                      command=self.load_file_name)
-        self.browse_button.grid(row=0, column=0, padx=5, pady=(20, 0))  # Add padding to the top
-        self.path_field = customtkinter.CTkEntry(self.button_frame, width=200)
-        self.path_field.grid(row=0, column=1, pady=(20, 0))  # Add less padding to the top and bottom
-        self.watermark_text = customtkinter.CTkEntry(self.button_frame, width=280)
-        self.watermark_text.grid(row=2, column=0, columnspan=2, pady=5)  # Add padding to the bottom
-        self.add_button = customtkinter.CTkButton(self.button_frame, text='Add Watermark', command=self.add_watermark)
-        self.add_button.grid(row=3, column=0, columnspan=2, pady=5)  # Add padding to the top
+        self.browse_button.grid(row=2, column=0, pady=(10, 0), padx=10, sticky='w')
 
-        # Center horizontally
-        self.button_frame.columnconfigure(0, weight=1)
+        self.watermark_text_label = customtkinter.CTkLabel(self.widget_frame, text='Watermark Text:',
+                                                           font=('verdana', 12), anchor='w')
+        self.watermark_text_label.grid(row=3, column=0, sticky='w', padx=15)
 
-        self.button_frame.grid(row=0, column=0, sticky='nsew')
+        self.watermark_text = customtkinter.CTkEntry(self.widget_frame)
+        self.watermark_text.grid(row=4, column=0, padx=10, pady=(0, 10), columnspan=2, sticky='nsew')
 
-        self.canvas = customtkinter.CTkCanvas(self, background='black', bd=0, highlightthickness=0, relief='ridge')
+        self.add_button = customtkinter.CTkButton(self.widget_frame, text='Add Watermark', command=self.add_watermark)
+        self.add_button.grid(row=5, column=0, padx=10, sticky='w')
+
+        self.save_button = customtkinter.CTkButton(self.widget_frame, text='Save', command=self.add_watermark)
+        self.save_button.grid(row=5, column=1, padx=10, sticky='e')
+
+        self.widget_frame.grid(row=0, column=0, sticky='nsew')
+
+        self.canvas = customtkinter.CTkCanvas(self, background='#333333', bd=0, highlightthickness=0, relief='ridge')
         self.canvas.grid(row=0, column=1, columnspan=3, sticky='nsew')
 
         self.canvas.bind('<Configure>', self.show_full_image)
@@ -75,10 +87,10 @@ class Watermarker(customtkinter.CTk):
         watermarked_image = self.my_image.copy()
 
         draw = ImageDraw.Draw(watermarked_image)
-        font = ImageFont.truetype('arial.ttf', 20)
+        font = ImageFont.truetype('verdana', 20)
 
         # Get the text size
-        textbbox = draw.textbbox((0, 0, 0, 0), f'© {watermark_text}', font=font)
+        textbbox = draw.textbbox((0, 0), f'© {watermark_text}', font=font)
         # Extract width and height from the textbbox tuple
         text_width, text_height = textbbox[2] - textbbox[0], textbbox[3] - textbbox[1]
 
