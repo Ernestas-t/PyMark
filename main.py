@@ -20,10 +20,12 @@ class Watermarker(customtkinter.CTk):
         self.image_ratio = self.my_image.size[0] / self.my_image.size[1]
         self.resized_image_tk = None
 
+        # make a sidebar frame to hold the widgets
         self.sidebar = customtkinter.CTkFrame(self)
-        self.sidebar.columnconfigure(0, weight=1)  # Make widget_frame resizable
+        self.sidebar.columnconfigure(0, weight=1)
 
-        self.widget_frame = customtkinter.CTkFrame(self.sidebar)
+        # make a widget frame as a child to sidebar
+        self.widget_frame = customtkinter.CTkFrame(self.sidebar, fg_color='transparent')
         self.widget_frame.columnconfigure(0, weight=1)
 
         # button frame widgets:
@@ -56,8 +58,13 @@ class Watermarker(customtkinter.CTk):
         self.save_button = customtkinter.CTkButton(self.widget_frame, text='Save', command=self.save_file)
         self.save_button.grid(row=6, column=1, padx=10, sticky='e')
 
+        self.logo = customtkinter.CTkLabel(self.sidebar, text='PyMark', font=('Arial', 40), text_color='#2271AF')
+        self.logo.pack(side='top', pady=30)
+
+
+        # place the sidebar and widget frames, fill='x' makes the widget_frame fill the container horizontally
         self.sidebar.grid(row=0, column=0, sticky='nsew')
-        self.widget_frame.grid(row=0, column=0, sticky='s')
+        self.widget_frame.pack(side='bottom', fill='x', pady=10)
 
         self.canvas = customtkinter.CTkCanvas(self, background='#333333', bd=0, highlightthickness=0, relief='ridge')
         self.canvas.grid(row=0, column=1, columnspan=3, sticky='nsew')
