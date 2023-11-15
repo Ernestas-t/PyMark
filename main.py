@@ -44,7 +44,8 @@ class Watermarker(customtkinter.CTk):
         self.watermark_text.grid(row=4, column=0, padx=10, pady=(0, 10), columnspan=2, sticky='nsew')
 
         self.slider = customtkinter.CTkSlider(self.widget_frame, from_=0, to=100, command=self.set_watermark_size)
-        self.slider.grid(row=5, column=0, columnspan=2, sticky='nsew', pady=(0,10))
+        self.slider.set(self.watermark_size)
+        self.slider.grid(row=5, column=0, columnspan=2, sticky='nsew', pady=(0, 10))
 
         self.add_button = customtkinter.CTkButton(self.widget_frame, text='Add Watermark', command=self.add_watermark)
         self.add_button.grid(row=6, column=0, padx=10, sticky='w')
@@ -87,7 +88,6 @@ class Watermarker(customtkinter.CTk):
 
             self.open_files()
 
-
     def open_files(self):
         if self.path_field.get():
             filename = self.path_field.get()
@@ -95,8 +95,8 @@ class Watermarker(customtkinter.CTk):
             self.image_ratio = self.my_image.size[0] / self.my_image.size[1]
 
             # Trigger the <Configure> event with the canvas dimensions
-            self.canvas.event_generate('<Configure>', width=self.canvas.winfo_width(), height=self.canvas.winfo_height())
-
+            self.canvas.event_generate('<Configure>', width=self.canvas.winfo_width(),
+                                       height=self.canvas.winfo_height())
 
     def save_file(self):
         # Use asksaveasfile to get the file path and name
